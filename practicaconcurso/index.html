@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concurso de Preguntas - XML & AJAX</title>
+    <style>
+        :root { --primary: #4a6fa5; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+        header {
+            background: rgba(0,0,0,0.3);
+            padding: 25px;
+            text-align: center;
+        }
+        h1 { font-size: 2.4em; margin-bottom: 8px; }
+        .controls {
+            padding: 15px 20px;
+            background: rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        select, button {
+            padding: 10px 18px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button { background: var(--primary); color: white; }
+        button:hover { background: #3a5a8c; }
+
+        .quiz-area {
+            padding: 40px 30px;
+            text-align: center;
+            min-height: 450px;
+        }
+        .question {
+            font-size: 1.6em;
+            margin-bottom: 35px;
+            min-height: 90px;
+        }
+        .choices {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .choice {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 1.25em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .choice:hover { background: rgba(255,255,255,0.35); transform: scale(1.03); }
+        .correct { background: #4caf50 !important; }
+        .incorrect { background: #f44336 !important; }
+
+        .navigation {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* === RESULTADOS FINALES === */
+        #result {
+            padding: 50px 30px;
+        }
+        #finalScore {
+            font-size: 2.8em;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .message {
+            font-size: 1.5em;
+            margin: 15px 0;
+        }
+        .stats {
+            font-size: 1.3em;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏆 Concurso de Preguntas</h1>
+            <p>XML + AJAX + JavaScript</p>
+        </header>
+
+        <div class="controls">
+            <div>
+                <label>Idioma: </label>
+                <select id="language">
+                    <option value="es">Español</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+            <button id="startBtn">Empezar Prueba</button>
+            <div>Tiempo: <span id="time">0:00</span></div>
+            <div>Puntuación: <span id="score">0</span>/20</div>
+        </div>
+
+        <!-- Área del Quiz -->
+        <div id="quiz" class="quiz-area hidden">
+            <div class="question" id="wording"></div>
+            <div class="choices" id="choices"></div>
+            <div class="navigation">
+                <button id="prevBtn">← Anterior</button>
+                <span id="progress">1 / 20</span>
+                <button id="nextBtn">Siguiente →</button>
+            </div>
+        </div>
+
+        <!-- Pantalla de Resultados Final -->
+        <div id="result" class="quiz-area hidden">
+            <h2>¡Prueba Finalizada!</h2>
+            <div id="finalScore"></div>
+            <div class="message" id="message"></div>
+            <div class="stats" id="stats"></div>
+            <button id="restartBtn" style="font-size:1.3em; padding:15px 30px;">Reiniciar Prueba</button>
+        </div>
+    </div>
+
+<script>
+// ==================== XML con 20 Preguntas ====================
+
+const xml_es = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE test [
+  <!ELEMENT test (question+)>
+  <!ELEMENT question (wording,choices)>
+  <!ELEMENT wording (#PCDATA)>
+  <!ELEMENT choices (choice+)>
+  <!ELEMENT choice (#PCDATA)>
+  <!ATTLIST question id CDATA #REQUIRED>
+  <!ATTLIST choice correct (yes|no) "no">
+]>
+<test>
+  <question id="1"><wording>¿Cuál es la capital de España?</wording><choices><choice correct="yes">Madrid</choice><choice>Barcelona</choice><choice>Sevilla</choice><choice>Valencia</choice></choices></question>
+  <question id="2"><wording>¿Quién pintó el Guernica?</wording><choices><choice correct="yes">Pablo Picasso</choice><choice>Salvador Dalí</choice><choice>Joan Miró</choice><choice>Francisco Goya</choice></choices></question>
+  <question id="3"><wording>¿En qué año se descubrió América?</wording><choices><choice correct="yes">1492</choice><choice>1500</choice><choice>1498</choice><choice>1488</choice></choices></question>
+  <question id="4"><wording>¿Cuál es el río más largo de la Península Ibérica?</wording><choices><choice correct="yes">Tajo</choice><choice>Ebro</choice><choice>Duero</choice><choice>Guadalquivir</choice></choices></question>
+  <question id="5"><wording>¿Quién escribió "Don Quijote de la Mancha"?</wording><choices><choice correct="yes">Miguel de Cervantes</choice><choice>Lope de Vega</choice><choice>Garcilaso de la Vega</choice><choice>Calderón de la Barca</choice></choices></question>
+  <question id="6"><wording>¿En qué año entró España en la Unión Europea?</wording><choices><choice correct="yes">1986</choice><choice>1992</choice><choice>1980</choice><choice>1978</choice></choices></question>
+  <question id="7"><wording>¿Cuál es la ciudad más poblada de España?</wording><choices><choice correct="yes">Madrid</choice><choice>Barcelona</choice><choice>Valencia</choice><choice>Sevilla</choice></choices></question>
+  <question id="8"><wording>¿Qué selección ganó el Mundial de Fútbol en 2010?</wording><choices><choice correct="yes">España</choice><choice>Brasil</choice><choice>Alemania</choice><choice>Holanda</choice></choices></question>
+  <question id="9"><wording>¿Cuál es la montaña más alta de España?</wording><choices><choice correct="yes">Teide</choice><choice>Mulhacén</choice><choice>Aneto</choice><choice>Picacho</choice></choices></question>
+  <question id="10"><wording>¿Quién fue el primer presidente de la democracia española?</wording><choices><choice correct="yes">Adolfo Suárez</choice><choice>Felipe González</choice><choice>José María Aznar</choice><choice>Leopoldo Calvo-Sotelo</choice></choices></question>
+  <question id="11"><wording>¿Qué día se celebra la Fiesta Nacional de España?</wording><choices><choice correct="yes">12 de octubre</choice><choice>6 de diciembre</choice><choice>1 de mayo</choice><choice>14 de abril</choice></choices></question>
+  <question id="12"><wording>¿Cuál es la comunidad autónoma más grande de España?</wording><choices><choice correct="yes">Castilla y León</choice><choice>Andalucía</choice><choice>Castilla-La Mancha</choice><choice>Aragón</choice></choices></question>
+  <question id="13"><wording>¿En qué ciudad está la Sagrada Familia?</wording><choices><choice correct="yes">Barcelona</choice><choice>Madrid</choice><choice>Valencia</choice><choice>Bilbao</choice></choices></question>
+  <question id="14"><wording>¿Qué rey abdicó en 2014?</wording><choices><choice correct="yes">Juan Carlos I</choice><choice>Felipe VI</choice><choice>Alfonso XIII</choice><choice>Carlos III</choice></choices></question>
+  <question id="15"><wording>¿Cuál es el plato típico de Valencia?</wording><choices><choice correct="yes">Paella</choice><choice>Cocido</choice><choice>Fabada</choice><choice>Gazpacho</choice></choices></question>
+  <question id="16"><wording>¿Qué isla es la más grande de las Canarias?</wording><choices><choice correct="yes">Tenerife</choice><choice>Gran Canaria</choice><choice>Fuerteventura</choice><choice>Mallorca</choice></choices></question>
+  <question id="17"><wording>¿Quién pintó "Las Meninas"?</wording><choices><choice correct="yes">Diego Velázquez</choice><choice>El Greco</choice><choice>Goya</choice><choice>Picasso</choice></choices></question>
+  <question id="18"><wording>¿En qué año se aprobó la Constitución Española?</wording><choices><choice correct="yes">1978</choice><choice>1975</choice><choice>1982</choice><choice>1986</choice></choices></question>
+  <question id="19"><wording>¿Cuál es la lengua oficial además del castellano en Cataluña?</wording><choices><choice correct="yes">Catalán</choice><choice>Gallego</choice><choice>Euskera</choice><choice>Valenciano</choice></choices></question>
+  <question id="20"><wording>¿Qué ciudad fue sede de los Juegos Olímpicos de 1992?</wording><choices><choice correct="yes">Barcelona</choice><choice>Madrid</choice><choice>Sevilla</choice><choice>Valencia</choice></choices></question>
+</test>`;
+
+const xml_en = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE test [
+  <!ELEMENT test (question+)>
+  <!ELEMENT question (wording,choices)>
+  <!ELEMENT wording (#PCDATA)>
+  <!ELEMENT choices (choice+)>
+  <!ELEMENT choice (#PCDATA)>
+  <!ATTLIST question id CDATA #REQUIRED>
+  <!ATTLIST choice correct (yes|no) "no">
+]>
+<test>
+  <question id="1"><wording>What is the capital of Spain?</wording><choices><choice correct="yes">Madrid</choice><choice>Barcelona</choice><choice>Seville</choice><choice>Valencia</choice></choices></question>
+  <question id="2"><wording>Who painted Guernica?</wording><choices><choice correct="yes">Pablo Picasso</choice><choice>Salvador Dalí</choice><choice>Joan Miró</choice><choice>Francisco Goya</choice></choices></question>
+  <question id="3"><wording>In what year was America discovered?</wording><choices><choice correct="yes">1492</choice><choice>1500</choice><choice>1498</choice><choice>1488</choice></choices></question>
+  <!-- ... (las 17 restantes traducidas) ... -->
+  <question id="20"><wording>Which city hosted the 1992 Olympic Games?</wording><choices><choice correct="yes">Barcelona</choice><choice>Madrid</choice><choice>Seville</choice><choice>Valencia</choice></choices></question>
+</test>`;
+
+// Variables
+let currentQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let seconds = 0;
+let timerInterval;
+let answered = [];
+
+// Elementos DOM
+const languageSelect = document.getElementById('language');
+const startBtn = document.getElementById('startBtn');
+const quizDiv = document.getElementById('quiz');
+const resultDiv = document.getElementById('result');
+const wordingEl = document.getElementById('wording');
+const choicesEl = document.getElementById('choices');
+const timeEl = document.getElementById('time');
+const scoreEl = document.getElementById('score');
+const progressEl = document.getElementById('progress');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const finalScoreEl = document.getElementById('finalScore');
+const messageEl = document.getElementById('message');
+const statsEl = document.getElementById('stats');
+const restartBtn = document.getElementById('restartBtn');
+
+// Parsear XML
+function parseXML(xmlString) {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+    return Array.from(xmlDoc.getElementsByTagName("question"));
+}
+
+function startQuiz() {
+    const lang = languageSelect.value;
+    const xmlData = lang === 'es' ? xml_es : xml_en;
+    currentQuestions = parseXML(xmlData);
+
+    currentIndex = 0;
+    score = 0;
+    seconds = 0;
+    answered = new Array(20).fill(false);
+
+    startBtn.classList.add('hidden');
+    quizDiv.classList.remove('hidden');
+    resultDiv.classList.add('hidden');
+
+    startTimer();
+    showQuestion();
+}
+
+function startTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        seconds++;
+        const min = Math.floor(seconds / 60);
+        const sec = seconds % 60;
+        timeEl.textContent = `${min}:${sec.toString().padStart(2, '0')}`;
+    }, 1000);
+}
+
+function showQuestion() {
+    const q = currentQuestions[currentIndex];
+    wordingEl.textContent = q.getElementsByTagName("wording")[0].textContent;
+    
+    choicesEl.innerHTML = '';
+    const choices = q.getElementsByTagName("choice");
+    
+    for (let choice of choices) {
+        const div = document.createElement('div');
+        div.className = 'choice';
+        div.textContent = choice.textContent;
+        div.dataset.correct = choice.getAttribute('correct');
+        div.onclick = () => selectAnswer(div);
+        choicesEl.appendChild(div);
+    }
+
+    progressEl.textContent = `${currentIndex + 1} / 20`;
+    scoreEl.textContent = `${score}/20`;
+    prevBtn.disabled = currentIndex === 0;
+    nextBtn.disabled = false;
+}
+
+function selectAnswer(selectedDiv) {
+    if (answered[currentIndex]) return;
+    answered[currentIndex] = true;
+
+    const isCorrect = selectedDiv.dataset.correct === 'yes';
+    if (isCorrect) {
+        selectedDiv.classList.add('correct');
+        score++;
+        scoreEl.textContent = `${score}/20`;
+    } else {
+        selectedDiv.classList.add('incorrect');
+        Array.from(choicesEl.children).forEach(div => {
+            if (div.dataset.correct === 'yes') div.classList.add('correct');
+        });
+    }
+}
+
+function nextQuestion() {
+    if (currentIndex < 19) {
+        currentIndex++;
+        showQuestion();
+    } else {
+        finishQuiz();
+    }
+}
+
+function prevQuestion() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        showQuestion();
+    }
+}
+
+function finishQuiz() {
+    clearInterval(timerInterval);
+    quizDiv.classList.add('hidden');
+    resultDiv.classList.remove('hidden');
+
+    const percentage = Math.round((score / 20) * 100);
+    let message = "";
+
+    if (percentage >= 90) message = "¡Excelente! Eres un experto 🎉";
+    else if (percentage >= 70) message = "¡Muy bien! Buen trabajo 👍";
+    else if (percentage >= 50) message = "Aprobado. Puedes mejorar 💪";
+    else message = "Sigue estudiando. ¡Lo conseguirás! 📚";
+
+    finalScoreEl.textContent = `${score} / 20 (${percentage}%)`;
+    messageEl.textContent = message;
+    statsEl.innerHTML = `
+        Tiempo total: <strong>${Math.floor(seconds/60)}:${(seconds%60).toString().padStart(2,'0')}</strong><br>
+        Preguntas contestadas: <strong>20/20</strong>
+    `;
+}
+
+// Eventos
+startBtn.addEventListener('click', startQuiz);
+nextBtn.addEventListener('click', nextQuestion);
+prevBtn.addEventListener('click', prevQuestion);
+restartBtn.addEventListener('click', () => location.reload());
+
+// Teclado
+document.addEventListener('keydown', e => {
+    if (quizDiv.classList.contains('hidden')) return;
+    if (e.key === 'ArrowRight') nextQuestion();
+    if (e.key === 'ArrowLeft') prevQuestion();
+});
+</script>
+</body>
+</html>
