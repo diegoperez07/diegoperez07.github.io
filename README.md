@@ -28,4 +28,4 @@
 
 #trabajotrimestral 3
 
-| 5    | trabajo trimestral | [Texto de enlace](https://github.com/diegoperez07/diegoperez07.github.io/practicaconcurso/index.html) |
+| 5    | trabajo trimestral | [Texto de enlace](https://diegoperez07.github.io/practicaconcurso/index.html) |
