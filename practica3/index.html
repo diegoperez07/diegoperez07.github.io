@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz XML & AJAX</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="quiz-container">
+        <header>
+            <div class="language-selector">
+                <label id="lbl-lang" for="langSelect">Idioma / Language:</label>
+                <select id="langSelect" onchange="cambiarIdioma()">
+                    <option value="es" selected>Español (Web dev)</option>
+                    <option value="en">English (XML / DTD)</option>
+                </select>
+            </div>
+            <div class="timer-box">
+                <span id="lbl-time">Tiempo:</span> <span id="timer">00:00</span>
+            </div>
+        </header>
+
+        <hr>
+
+        <main id="quiz-presentation">
+            <div id="welcome-screen">
+                <h2 id="welcome-title">¡Bienvenido al Test Interactivo!</h2>
+                <p id="welcome-desc">Pon a prueba tus conocimientos. Tienes 20 preguntas por delante.</p>
+                <button class="btn" id="btn-start" onclick="iniciarQuiz()">Comenzar / Start</button>
+            </div>
+
+            <div id="question-card" class="hidden">
+                <div class="progress" id="question-progress">Pregunta 1 de 20</div>
+                <h2 id="question-wording">Aquí irá la pregunta</h2>
+                <div id="choices-container">
+                    </div>
+                <div class="actions">
+                    <button class="btn" id="btn-next" onclick="muestraSiguiente()" disabled>Siguiente</button>
+                </div>
+            </div>
+
+            <div id="result-screen" class="hidden">
+                <h2 id="result-title">Fin de la prueba</h2>
+                <div class="score-circle">
+                    <span id="score-text">0 / 20</span>
+                </div>
+                <p id="result-time-summary">Tiempo empleado: </p>
+                <button class="btn" id="btn-restart" onclick="reiniciarQuiz()">Intentar de nuevo</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

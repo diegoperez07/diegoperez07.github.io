@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE test [
+  <!ELEMENT test (question+)>
+  <!ELEMENT question (wording,choices)>
+  <!ELEMENT wording (#PCDATA)>
+  <!ELEMENT choices (choice+)>
+  <!ELEMENT choice (#PCDATA)>
+  <!ATTLIST question id CDATA #REQUIRED>
+  <!ATTLIST choice correct (yes|no) "no">
+]>
+<test>
+  <question id="1">
+    <wording>¿Qué significa XML?</wording>
+    <choices>
+      <choice correct="yes">eXtensible Markup Language</choice>
+      <choice>Excellent Markup Link</choice>
+      <choice>Extended Modern Language</choice>
+      <choice>eXtra Modern Linux</choice>
+    </choices>
+  </question>
+  <question id="2">
+    <wording>¿Qué lenguaje se usa para dar estilo a una página web?</wording>
+    <choices>
+      <choice>HTML</choice>
+      <choice>XML</choice>
+      <choice correct="yes">CSS</choice>
+      <choice>SQL</choice>
+    </choices>
+  </question>
+  <question id="3">
+    <wording>¿Cuál es la función principal de un archivo DTD?</wording>
+    <choices>
+      <choice>Dar diseño visual al XML</choice>
+      <choice correct="yes">Definir la estructura y reglas de un XML</choice>
+      <choice>Conectar a una base de datos</choice>
+      <choice>Ejecutar código en el servidor</choice>
+    </choices>
+  </question>
+  <question id="4">
+    <wording>¿Qué protocolo se utiliza para transferir datos en la web?</wording>
+    <choices>
+      <choice correct="yes">HTTP / HTTPS</choice>
+      <choice>FTP</choice>
+      <choice>SSH</choice>
+      <choice>SMTP</choice>
+    </choices>
+  </question>
+  <question id="5">
+    <wording>¿Cuál de estos elementos es un lenguaje de programación?</wording>
+    <choices>
+      <choice>HTML</choice>
+      <choice>CSS</choice>
+      <choice>XML</choice>
+      <choice correct="yes">JavaScript</choice>
+    </choices>
+  </question>
+  <question id="6">
+    <wording>¿Qué etiqueta se usa en HTML para insertar un salto de línea?</wording>
+    <choices>
+      <choice correct="yes">&lt;br&gt;</choice>
+      <choice>&lt;lb&gt;</choice>
+      <choice>&lt;break&gt;</choice>
+      <choice>&lt;p&gt;</choice>
+    </choices>
+  </question>
+  <question id="7">
+    <wording>En XML, ¿las etiquetas distinguen entre mayúsculas y minúsculas?</wording>
+    <choices>
+      <choice correct="yes">Sí, siempre</choice>
+      <choice>No, nunca</choice>
+      <choice>Solo en las etiquetas raíz</choice>
+      <choice>Depende del navegador</choice>
+    </choices>
+  </question>
+  <question id="8">
+    <wording>¿Qué significa AJAX?</wording>
+    <choices>
+      <choice>Advanced JavaScript and XML</choice>
+      <choice correct="yes">Asynchronous JavaScript and XML</choice>
+      <choice>Automated JSON and XHTML</choice>
+      <choice>Asynchronous JSON and XML</choice>
+    </choices>
+  </question>
+  <question id="9">
+    <wording>¿Qué objeto nativo de JavaScript se utiliza para realizar peticiones AJAX?</wording>
+    <choices>
+      <choice>JSONRequest</choice>
+      <choice>FetchObject</choice>
+      <choice correct="yes">XMLHttpRequest</choice>
+      <choice>HttpHandler</choice>
+    </choices>
+  </question>
+  <question id="10">
+    <wording>¿Cuál es la versión actual del estándar HTML dominante?</wording>
+    <choices>
+      <choice>HTML4</choice>
+      <choice>XHTML</choice>
+      <choice correct="yes">HTML5</choice>
+      <choice>HTML6</choice>
+    </choices>
+  </question>
+  <question id="11">
+    <wording>¿Qué propiedad CSS cambia el color de fondo?</wording>
+    <choices>
+      <choice>color</choice>
+      <choice correct="yes">background-color</choice>
+      <choice>bgcolor</choice>
+      <choice>mask-color</choice>
+    </choices>
+  </question>
+  <question id="12">
+    <wording>¿Cómo se cierra correctamente un elemento XML vacío?</wording>
+    <choices>
+      <choice>&lt;elemento&gt;</choice>
+      <choice>&lt;/elemento&gt;</choice>
+      <choice correct="yes">&lt;elemento /&gt;</choice>
+      <choice>&lt;\elemento&gt;</choice>
+    </choices>
+  </question>
+  <question id="13">
+    <wording>¿Qué contenedor web permite almacenar datos de sesión localmente de forma persistente?</wording>
+    <choices>
+      <choice correct="yes">localStorage</choice>
+      <choice>sessionCookie</choice>
+      <choice>XMLStore</choice>
+      <choice>DataCache</choice>
+    </choices>
+  </question>
+  <question id="14">
+    <wording>¿Qué significa DOM en desarrollo web?</wording>
+    <choices>
+      <choice>Data Object Model</choice>
+      <choice correct="yes">Document Object Model</choice>
+      <choice>Digital Output Media</choice>
+      <choice>Direct Object Management</choice>
+    </choices>
+  </question>
+  <question id="15">
+    <wording>¿Qué símbolo se usa en CSS para seleccionar un elemento por su ID?</wording>
+    <choices>
+      <choice>.</choice>
+      <choice correct="yes">#</choice>
+      <choice>*</choice>
+      <choice>@</choice>
+    </choices>
+  </question>
+  <question id="16">
+    <wording>¿Cuál es el formato estándar para enviar datos estructurados mediante texto ligero?</wording>
+    <choices>
+      <choice>TXT</choice>
+      <choice>XML</choice>
+      <choice correct="yes">JSON</choice>
+      <choice>CSV</choice>
+    </choices>
+  </question>
+  <question id="17">
+    <wording>¿Qué etiqueta HTML se utiliza para enlazar un archivo JavaScript?</wording>
+    <choices>
+      <choice>&lt;link&gt;</choice>
+      <choice correct="yes">&lt;script&gt;</choice>
+      <choice>&lt;js&gt;</choice>
+      <choice>&lt;code&gt;</choice>
+    </choices>
+  </question>
+  <question id="18">
+    <wording>¿Qué tipo de nodo del DOM representa el texto dentro de una etiqueta XML?</wording>
+    <choices>
+      <choice>Element node</choice>
+      <choice>Attribute node</choice>
+      <choice correct="yes">Text node</choice>
+      <choice>Comment node</choice>
+    </choices>
+  </question>
+  <question id="19">
+    <wording>¿Cuál es el puerto por defecto para el protocolo seguro HTTPS?</wording>
+    <choices>
+      <choice>80</choice>
+      <choice>21</choice>
+      <choice correct="yes">443</choice>
+      <choice>8080</choice>
+    </choices>
+  </question>
+  <question id="20">
+    <wording>¿Qué significa que un documento XML sea "válido"?</wording>
+    <choices>
+      <choice>Que abre bien en el navegador</choice>
+      <choice>Que tiene mayúsculas correctas</choice>
+      <choice correct="yes">Que cumple con las reglas de su DTD o Schema</choice>
+      <choice>Que pesa menos de 1MB</choice>
+    </choices>
+  </question>
+</test>
