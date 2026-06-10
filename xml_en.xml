@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE test [
+  <!ELEMENT test (question+)>
+  <!ELEMENT question (wording,choices)>
+  <!ELEMENT wording (#PCDATA)>
+  <!ELEMENT choices (choice+)>
+  <!ELEMENT choice (#PCDATA)>
+  <!ATTLIST question id CDATA #REQUIRED>
+  <!ATTLIST choice correct (yes|no) "no">
+]>
+<test>
+  <question id="1">
+    <wording>What does DTD stand for?</wording>
+    <choices>
+      <choice correct="yes">Document Type Definition</choice>
+      <choice>Digital Technology Data</choice>
+      <choice>Direct Text Document</choice>
+      <choice>Data Type Definition</choice>
+    </choices>
+  </question>
+  <question id="2">
+    <wording>Which character is used to indicate an end tag in XML?</wording>
+    <choices>
+      <choice>*</choice>
+      <choice>&lt;</choice>
+      <choice correct="yes">/</choice>
+      <choice>\</choice>
+    </choices>
+  </question>
+  <question id="3">
+    <wording>Is XML a replacement for HTML?</wording>
+    <choices>
+      <choice>Yes</choice>
+      <choice correct="yes">No, they have different purposes</choice>
+      <choice>Only for mobile devices</choice>
+      <choice>Yes, since 2015</choice>
+    </choices>
+  </question>
+  <question id="4">
+    <wording>What does a "Well-formed" XML mean?</wording>
+    <choices>
+      <choice>It has a CSS stylesheet attached</choice>
+      <choice correct="yes">It follows the strict structural syntax rules of XML</choice>
+      <choice>It validates perfectly against a DTD</choice>
+      <choice>It contains translated content</choice>
+    </choices>
+  </question>
+  <question id="5">
+    <wording>In a DTD, what does #PCDATA mean?</wording>
+    <choices>
+      <choice>Private Data</choice>
+      <choice>Primary Data</choice>
+      <choice correct="yes">Parsed Character Data</choice>
+      <choice>Packed Code Data</choice>
+    </choices>
+  </question>
+  <question id="6">
+    <wording>Which DTD symbol means an element can occur zero or more times?</wording>
+    <choices>
+      <choice>+</choice>
+      <choice>?</choice>
+      <choice correct="yes">*</choice>
+      <choice>|</choice>
+    </choices>
+  </question>
+  <question id="7">
+    <wording>Which DTD symbol means an element must occur one or more times?</wording>
+    <choices>
+      <choice correct="yes">+</choice>
+      <choice>*</choice>
+      <choice>?</choice>
+      <choice>!</choice>
+    </choices>
+  </question>
+  <question id="8">
+    <wording>Which attribute type in DTD represents a unique identifier?</wording>
+    <choices>
+      <choice>CDATA</choice>
+      <choice correct="yes">ID</choice>
+      <choice>IDREF</choice>
+      <choice>NMTOKEN</choice>
+    </choices>
+  </question>
+  <question id="9">
+    <wording>Can an XML document have multiple root elements?</wording>
+    <choices>
+      <choice>Yes, up to three</choice>
+      <choice correct="yes">No, it must have exactly one</choice>
+      <choice>Yes, if defined in the DTD</choice>
+      <choice>Only in AJAX requests</choice>
+    </choices>
+  </question>
+  <question id="10">
+    <wording>What does the '?' symbol represent in a DTD declaration?</wording>
+    <choices>
+      <choice>Exactly one time</choice>
+      <choice correct="yes">Zero or one time (optional)</choice>
+      <choice>At least twice</choice>
+      <choice>Any character</choice>
+    </choices>
+  </question>
+  <question id="11">
+    <wording>Which of the following is correct XML syntax?</wording>
+    <choices>
+      <choice>&lt;Name&gt;John&lt;/name&gt;</choice>
+      <choice correct="yes">&lt;name&gt;John&lt;/name&gt;</choice>
+      <choice>&lt;name&gt;John&lt;/Name&gt;</choice>
+      <choice>&lt;NAME&gt;John&lt;/name&gt;</choice>
+    </choices>
+  </question>
+  <question id="12">
+    <wording>How do you write a comment in an XML document?</wording>
+    <choices>
+      <choice>// This is a comment</choice>
+      <choice correct="yes">&lt;!-- This is a comment --&gt;</choice>
+      <choice>/* This is a comment */</choice>
+      <choice># This is a comment</choice>
+    </choices>
+  </question>
+  <question id="13">
+    <wording>In a DTD declaration, what keyword means an attribute is mandatory?</wording>
+    <choices>
+      <choice>#IMPLIED</choice>
+      <choice>#FIXED</choice>
+      <choice correct="yes">#REQUIRED</choice>
+      <choice>#DEFAULT</choice>
+    </choices>
+  </question>
+  <question id="14">
+    <wording>What does the choice vertical bar '|' mean in a DTD element declaration?</wording>
+    <choices>
+      <choice>And</choice>
+      <choice correct="yes">Or (alternation)</choice>
+      <choice>Sequence</choice>
+      <choice>Empty</choice>
+    </choices>
+  </question>
+  <question id="15">
+    <wording>Which technology can be used to style an XML document directly?</wording>
+    <choices>
+      <choice>PHP</choice>
+      <choice correct="yes">XSLT</choice>
+      <choice>SQL</choice>
+      <choice>Python</choice>
+    </choices>
+  </question>
+  <question id="16">
+    <wording>What type of XML parser loads the whole document into memory?</wording>
+    <choices>
+      <choice>SAX</choice>
+      <choice correct="yes">DOM</choice>
+      <choice>StAX</choice>
+      <choice>JSON</choice>
+    </choices>
+  </question>
+  <question id="17">
+    <wording>What is the correct extension for an XML file?</wording>
+    <choices>
+      <choice>.html</choice>
+      <choice>.txt</choice>
+      <choice correct="yes">.xml</choice>
+      <choice>.dtd</choice>
+    </choices>
+  </question>
+  <question id="18">
+    <wording>Can XML attributes contain multiple values separated by spaces natively?</wording>
+    <choices>
+      <choice>Yes, always</choice>
+      <choice>No, never</choice>
+      <choice correct="yes">Yes, if declared as NMTOKENS in DTD</choice>
+      <choice>Only in HTML5</choice>
+    </choices>
+  </question>
+  <question id="19">
+    <wording>What is the purpose of XML namespaces?</wording>
+    <choices>
+      <choice>To make files smaller</choice>
+      <choice correct="yes">To avoid element name conflicts</choice>
+      <choice>To encrypt data</choice>
+      <choice>To speed up AJAX</choice>
+    </choices>
+  </question>
+  <question id="20">
+    <wording>Which predefined entity represents the less-than symbol '&lt;' in XML?</wording>
+    <choices>
+      <choice>&amp;gt;</choice>
+      <choice>&amp;amp;</choice>
+      <choice correct="yes">&amp;lt;</choice>
+      <choice>&amp;quot;</choice>
+    </choices>
+  </question>
+</test>
