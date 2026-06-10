@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lector RSS con AJAX</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        #feed-title {
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        .loading {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #3498db;
+        }
+        .error {
+            padding: 15px;
+            background-color: #fab1a0;
+            color: #d63031;
+            border-radius: 5px;
+            text-align: center;
+        }
+        /* Tarjetas de noticias */
+        .noticia-card {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .noticia-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+        .noticia-card h3 {
+            margin-top: 0;
+            color: #2980b9;
+        }
+        .noticia-card h3 a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .noticia-card h3 a:hover {
+            color: #3498db;
+        }
+        .meta {
+            font-size: 0.85rem;
+            color: #95a5a6;
+            margin-bottom: 10px;
+        }
+        .descripcion {
+            line-height: 1.6;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Lector de Noticias Tecnológicas</h1>
+        <div id="feed-title">Cargando información del canal...</div>
+        
+        <div id="noticias-container">
+            <div class="loading">Iniciando petición AJAX...</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // URL del RSS de Tecnología de El País
+            const urlRSS = "https://elpais.com/rss/tecnologia/portada.txt";
+            
+            // Proxy para evitar el bloqueo de CORS en entornos locales de desarrollo
+            const proxyCORS = "https://api.allorigins.win/raw?url=";
+            
+            const contenedor = document.getElementById("noticias-container");
+            const tituloCanal = document.getElementById("feed-title");
+
+            // Petición AJAX mediante Fetch API
+            fetch(proxyCORS + encodeURIComponent(urlRSS))
+                .then(response => {
+                    if (!response.ok) throw new Error("Error de red al conectar con el servidor.");
+                    return response.text(); // El RSS viene en formato texto/XML
+                })
+                .then(strXml => {
+                    // Limpiamos el contenedor de carga
+                    contenedor.innerHTML = "";
+
+                    // Parsea el string de texto plano a un documento DOM XML interactivo
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(strXml, "text/xml");
+
+                    // Extraer y mostrar el título del canal de noticias
+                    const tituloGlobal = xmlDoc.querySelector("channel > title").textContent;
+                    tituloCanal.textContent = `Fuente: ${tituloGlobal}`;
+
+                    // Obtener todos los elementos <item> (las noticias)
+                    const items = xmlDoc.querySelectorAll("item");
+
+                    if (items.length === 0) {
+                        contenedor.innerHTML = "<p>No se encontraron noticias disponibles en este momento.</p>";
+                        return;
+                    }
+
+                    // Recorrer los artículos y renderizarlos en el HTML
+                    items.forEach(item => {
+                        // Control de nodos por seguridad en caso de etiquetas vacías
+                        const titulo = item.querySelector("title")?.textContent || "Sin título";
+                        const enlace = item.querySelector("link")?.textContent || "#";
+                        const descripcion = item.querySelector("description")?.textContent || "Sin descripción disponible.";
+                        const fecha = item.querySelector("pubDate")?.textContent || "Fecha desconocida";
+
+                        // Estructurar la tarjeta formateando la fecha a algo más legible
+                        const fechaFormateada = new Date(fecha).toLocaleDateString("es-ES", {
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit"
+                        });
+
+                        const tarjetaHtml = `
+                            <div class="noticia-card">
+                                <h3><a href="${enlace}" target="_blank">${titulo}</a></h3>
+                                <div class="meta">Publicado el: ${fechaFormateada}</div>
+                                <div class="descripcion">${descripcion}</div>
+                            </div>
+                        `;
+                        
+                        contenedor.innerHTML += tarjetaHtml;
+                    });
+                })
+                .catch(error => {
+                    console.error("Detalles del fallo AJAX:", error);
+                    tituloCanal.textContent = "Error de sincronización";
+                    contenedor.innerHTML = `
+                        <div class="error">
+                            <strong>¡Vaya! No se pudo cargar el feed RSS.</strong><br>
+                            Motivo: ${error.message}<br><br>
+                            <small>Nota: Si es un error de CORS, refresca la página o intenta con otro proxy.</small>
+                        </div>
+                    `;
+                });
+        });
+    </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,112 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:schema id="tablaPeriodicaSchema" targetNamespace="http://tempuri.org/periodica" xmlns="http://tempuri.org/periodica" xmlns_mstns="http://tempuri.org/periodica" elementFormDefault="qualified">
+
+    <xs:element name="tabla_periodica">
+      <xs:complexType>
+        <xs:sequence>
+          <xs:element name="atomo" maxOccurs="unbounded" type="tipoAtomo"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="tipoAtomo">
+      <xs:sequence>
+        <xs:element name="nombre" type="tipoNombre"/>
+        <xs:element name="simbolo" type="tipoSimbolo"/>
+        <xs:element name="numero_atomico" type="tipoNumeroAtomico"/>
+        <xs:element name="peso_atomico" type="xs:decimal"/>
+        <xs:element name="punto_ebullicion" type="tipoPuntoEbullicion" minOccurs="0"/>
+        <xs:element name="densidad" type="tipoDensidad"/>
+      </xs:sequence>
+      <xs:attribute name="estado" type="tipoEstado" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="tipoNombre">
+      <xs:restriction base="xs:string">
+        <xs:maxLength value="15"/>
+      </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="tipoSimbolo">
+      <xs:restriction base="xs:string">
+        <xs:maxLength value="3"/>
+        <xs:pattern value="[A-Z][a-z]{0,2}"/>
+      </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="tipoNumeroAtomico">
+      <xs:restriction base="xs:integer">
+        <xs:minInclusive value="1"/>
+        <xs:maxInclusive value="118"/>
+      </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="tipoEstado">
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="solido"/>
+        <xs:enumeration value="liquido"/>
+        <xs:enumeration value="gaseoso"/>
+        <xs:enumeration value="gas"/>
+      </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="tipoPuntoEbullicion">
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="unidades" default="centigrados">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="centigrados"/>
+                <xs:enumeration value="kelvin"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="tipoDensidad">
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute name="unidades" type="xs:string" use="required"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+
+  </xs:schema>
+
+  <tabla_periodica xmlns="http://tempuri.org/periodica">
+
+    <atomo estado="gas">
+        <nombre>Hidrógeno</nombre>
+        <simbolo>H</simbolo>
+        <numero_atomico>1</numero_atomico>
+        <peso_atomico>1.00794</peso_atomico>
+        <punto_ebullicion unidades="kelvin">20.28</punto_ebullicion>
+        <densidad unidades="gramos/centímetros cúbicos">0.0899</densidad>
+    </atomo>
+
+    <atomo estado="gas">
+        <nombre>Helio</nombre>
+        <simbolo>He</simbolo>
+        <numero_atomico>2</numero_atomico>
+        <peso_atomico>4.0026</peso_atomico>
+        <punto_ebullicion unidades="kelvin">4.216</punto_ebullicion>
+        <densidad unidades="gramos/centímetros cúbicos">0.1785</densidad>
+    </atomo>
+
+    <atomo estado="gas">
+        <nombre>Oxígeno</nombre>
+        <simbolo>O</simbolo>
+        <numero_atomico>8</numero_atomico>
+        <peso_atomico>15.999</peso_atomico>
+        <punto_ebullicion>-182.96</punto_ebullicion>
+        <densidad unidades="g/cm³">0.001429</densidad>
+    </atomo>
+
+  </tabla_periodica>
+
+</root>
