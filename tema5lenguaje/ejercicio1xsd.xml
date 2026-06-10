@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:schema id="dawSchema" targetNamespace="http://tempuri.org/daw" xmlns="http://tempuri.org/daw" xmlns_mstns="http://tempuri.org/daw" elementFormDefault="qualified">
+    
+    <xs:element name="daw">
+      <xs:complexType>
+        <xs:sequence>
+          <xs:element name="modulo" maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="nombre" type="xs:string"/>
+                <xs:element name="descripcion" type="xs:string"/>
+                <xs:element name="codigo" type="xs:string"/>
+                <xs:element name="profesor" type="xs:string"/>
+                <xs:element name="fechas" type="tipoFechas"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="tipoFechas">
+      <xs:sequence>
+        <xs:element name="inicio" type="tipoDetalleFecha"/>
+        <xs:element name="fin" type="tipoDetalleFecha"/>
+      </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="tipoDetalleFecha">
+      <xs:sequence>
+        <xs:element name="dia" type="tipoDia"/>
+        <xs:element name="mes" type="tipoMes"/>
+        <xs:element name="anyo" type="tipoAnyo"/>
+      </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="tipoDia">
+      <xs:restriction base="xs:integer">
+        <xs:minInclusive value="1"/>
+        <xs:maxInclusive value="31"/>
+      </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="tipoMes">
+      <xs:restriction base="xs:integer">
+        <xs:minInclusive value="1"/>
+        <xs:maxInclusive value="12"/>
+      </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="tipoAnyo">
+      <xs:restriction base="xs:integer">
+        <xs:minInclusive value="2000"/>
+        <xs:maxInclusive value="2100"/>
+      </xs:restriction>
+    </xs:simpleType>
+    
+  </xs:schema>
+
+  <daw xmlns="http://tempuri.org/daw">
+    <modulo>
+        <nombre>Desarrollo Web en Entorno Cliente</nombre>
+        <descripcion>Programación en el lado del cliente utilizando JavaScript y tecnologías web modernas.</descripcion>
+        <codigo>0612</codigo>
+        <profesor>Ana Martínez Gómez</profesor>
+        <fechas>
+            <inicio>
+                <dia>15</dia>
+                <mes>9</mes>
+                <anyo>2025</anyo>
+            </inicio>
+            <fin>
+                <dia>22</dia>
+                <mes>6</mes>
+                <anyo>2026</anyo>
+            </fin>
+        </fechas>
+    </modulo>
+
+    <modulo>
+        <nombre>Desarrollo Web en Entorno Servidor</nombre>
+        <descripcion>Generación dinámica de páginas web en servidor con lenguajes como PHP o Node.js y acceso a bases de datos.</descripcion>
+        <codigo>0613</codigo>
+        <profesor>Carlos Rodríguez López</profesor>
+        <fechas>
+            <inicio>
+                <dia>15</dia>
+                <mes>9</mes>
+                <anyo>2025</anyo>
+            </inicio>
+            <fin>
+                <dia>22</dia>
+                <mes>6</mes>
+                <anyo>2026</anyo>
+            </fin>
+        </fechas>
+    </modulo>
+  </daw>
+
+</root>
